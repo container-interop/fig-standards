@@ -97,6 +97,7 @@ In this section, we will describe the list of features that we can consider to f
 
 1. Ability to directly debug the code generating the services (using Xdebug or a similar tool). This is typically a feature available in service providers and not available in configuration files.
 
+1. Ability to get customized error messages in case of misconfiguration. This is the ability, for a package, to throw an error/exception with a detailed custom message if a set of prerequisites is not met. For instance, if an entry expects the container to contain a set of options/dependencies, this is the ability to throw a custom exception message explaining what options are missing, but also how to configure those options.
 
 When the list of features is complete, I propose we create a poll on each feature, ranking them from -- to ++:
 
