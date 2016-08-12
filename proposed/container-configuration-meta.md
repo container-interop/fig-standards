@@ -99,6 +99,8 @@ Below is a list of all possible features that have been suggested to fulfill the
 
 1. Ability to directly debug the code generating the services (using Xdebug or a similar tool). This is typically a feature available in service providers and not available in configuration files.
 
+1. Ability to get customized error messages in case of misconfiguration. This is the ability, for a package, to throw an error/exception with a detailed custom message if a set of prerequisites is not met. For instance, if an entry expects the container to contain a set of options/dependencies, this is the ability to throw a custom exception message explaining what options are missing, but also how to configure those options.
+
 #### 4.1.2. Vote on those features
 
 A vote is currently being cast on the list of features that must be kept.
@@ -128,9 +130,9 @@ Ability to create a container entry using a static factory method. | ++ | ++ | +
 Ability to create a container entry using a factory method from a container service. | ++ | ++ | ++
 Ability to create a container entry using a closure | -- | -- | --
 Ability to compile all container entries into a single container for maximum performance. | ++ | ++ | + [(1)](#explanation_1)
-Ability to alias a container entry to another. | ++ | ++ | ++ 
+Ability to alias a container entry to another. | ++ | ++ | ++
 Ability to modify an entry defined outside of the "module" before it is returned by the container.| + | + | ++
-Ability to create container entries for scalar values. | ++ | ++ | ++ 
+Ability to create container entries for scalar values. | ++ | ++ | ++
 Ability to create container entries from constants (from the define keyword or the const keyword) | ++ | ++ | ++
 Ability to create container entries that are numerically indexed arrays. Values of the array can be any valid container entry (i.e. objects, scalars, another array...) | ++ | ++ | ++
 Ability to create container entries that are associative arrays (maps). Values of the array can be any valid container entry (i.e. objects, scalars, another array...) | ++ | ++ | ++
