@@ -33,7 +33,9 @@ The way a framework can automatically **discover the container definitions** of 
 
 First of all, a word of caution. Container configuration is shared between the application developer and the packages bringing some configuration. Ultimately, container configuration is the responsibility of the application developer. Packages should however be able to bring a "default" configuration to help the developer getting started with sensible defaults (container configuration can be quite complex sometimes). This configuration should be both optional (possibility to bypass it completely), and overwritable (possibility to changes bits of the configuration).
 
-In this section, we will describe the list of features that we can consider to fulfill the goal of this PSR: packages registering container entries. Let's list all possible features and later, we can vote on the features we want to keep or not.
+Below is a list of all possible features that have been suggested to fulfill the goal of this PSR: packages registering container entries.
+
+#### 4.1.1. Complete list of features
 
 1. Ability to create a container entry using the `new` keyword.
 
@@ -99,16 +101,54 @@ In this section, we will describe the list of features that we can consider to f
 
 1. Ability to get customized error messages in case of misconfiguration. This is the ability, for a package, to throw an error/exception with a detailed custom message if a set of prerequisites is not met. For instance, if an entry expects the container to contain a set of options/dependencies, this is the ability to throw a custom exception message explaining what options are missing, but also how to configure those options.
 
-When the list of features is complete, I propose we create a poll on each feature, ranking them from -- to ++:
+#### 4.1.2. Vote on those features
 
-- -- = highly counterproductive
-- - = not needed
-- / = indifferent
-- + = nice to have
-- ++ = absolutely needed
+A vote is currently being cast on the list of features that must be kept.
+Anyone interested is [welcome to vote](https://github.com/container-interop/fig-standards/issues/9)
+Vote results are [aggregated in the wiki](https://github.com/container-interop/fig-standards/wiki/Vote-results-for-the-important-feature-list)
+
+### 4.2. Format
+
+The following formats are considered for implementing the configuration:
+
+- a standard static format, for example based on XML, JSON, YAML... This has been discussed by `container-interop` members (with a preference for XML), but was not tested.
+- standard PHP objects/interfaces representing container definitions. This has been tested in [container-interop/definition-interop](https://github.com/container-interop/definition-interop)
+- standard service providers. This has been tested in [container-interop/service-provider](https://github.com/container-interop/service-provider)
+
+#### 4.2.1 Feature support
+
+List of features that can be supported for each configuration format.
+
+Note: only features with an average score of "+" or "++" have been kept.
+
+Feature | Static format | Definition interfaces | Service provider
+--------|:-------------:|:-------------:|:-------------:
+Ability to create a container entry using the new keyword. | ++ | ++ | ++
+Ability to call methods (setters or otherwise) on a container entry | ++ | ++ | ++
+Ability to set public properties of a container entry. | ++ | ++ | ++
+Ability to create a container entry using a static factory method. | ++ | ++ | ++
+Ability to create a container entry using a factory method from a container service. | ++ | ++ | ++
+Ability to create a container entry using a closure | -- | -- | --
+Ability to compile all container entries into a single container for maximum performance. | ++ | ++ | + [(1)](#explanation_1)
+Ability to alias a container entry to another. | ++ | ++ | ++
+Ability to modify an entry defined outside of the "module" before it is returned by the container.| + | + | ++
+Ability to create container entries for scalar values. | ++ | ++ | ++
+Ability to create container entries from constants (from the define keyword or the const keyword) | ++ | ++ | ++
+Ability to create container entries that are numerically indexed arrays. Values of the array can be any valid container entry (i.e. objects, scalars, another array...) | ++ | ++ | ++
+Ability to create container entries that are associative arrays (maps). Values of the array can be any valid container entry (i.e. objects, scalars, another array...) | ++ | ++ | ++
+Ability for a package to extend those arrays (add elements to the arrays). | + | + | ++
+Ability to locally declare "anonymous"/"private" services in a package. | + | + | ++
+Ability to have several services for the same class or interface (for instance, several services implementing a LoggerInterface). | ++ | ++ | ++
+Ability to have "optional" references | + | + | ++
+Ability to have fall-back aliases/services: a alias/service is only declared by a package if no other package has provided that service so far. | / | / | ++
+Ability to have static tools analyzing the bindings (for instance, having Packagist analyze the bindings to search for some services...) | ++ | - | --
+Ability to perform simple computations on values before injecting them in a container entry | -- | - | ++
+Ability to directly debug the code generating the services (using Xdebug or a similar tool). | -- | - | ++
 
 
-### 4.2. The format
+<a name="explanation_1"></a> (1) For compiled containers, a static format or a definition interface allows to directly put the code generating the services in the container (maximum performance). With service providers, the compiled container will call a static factory method of the service provider. So creating a service from a service provider will generate an additional method call.
 
-TODO
+The few differences can be summed up as:
 
+- the static file format and definition objects can be used to their full potential by compiled containers
+- the service provider approach leaves the most freedom as any PHP code can be used by module authors to create container entries
